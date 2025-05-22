@@ -66,8 +66,16 @@
   <!-- Floating cubes -->
   <div id="floating-cubes-container"></div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Function to initialize and run the floating cubes animation
+    function initFloatingCubes() {
       const container = document.getElementById('floating-cubes-container');
+
+      // Exit early if the container doesn't exist
+      if (!container) return;
+
+      // Clear any existing cubes
+      container.innerHTML = '';
+
       const colors = [
         'rgba(173, 216, 230, 0.3)', // Light blue
         'rgba(255, 182, 193, 0.3)', // Light pink
@@ -99,7 +107,9 @@
         container.appendChild(cube);
 
         setTimeout(() => {
-          cube.remove();
+          if (cube.parentNode === container) {
+            cube.remove();
+          }
         }, (duration + delay) * 1000);
       }
 
@@ -107,15 +117,40 @@
         createCube();
       }
 
-      setInterval(createCube, 2000);
-    });
+      // Store the interval ID so we can clear it if needed
+      window.cubeInterval = setInterval(createCube, 2000);
+
+      return window.cubeInterval;
+    }
+
+    // Clear existing intervals on page navigation to prevent memory leaks
+    function clearCubeInterval() {
+      if (window.cubeInterval) {
+        clearInterval(window.cubeInterval);
+        window.cubeInterval = null;
+      }
+    }
+
+    // Initialize on DOMContentLoaded (for initial page load)
+    document.addEventListener('DOMContentLoaded', initFloatingCubes);
+
+    // Initialize on turbo:load (for Turbo navigation)
+    document.addEventListener('turbo:load', initFloatingCubes);
+
+    // Clear interval when navigating away
+    document.addEventListener('turbo:before-visit', clearCubeInterval);
+
+    // In case page is already loaded
+    if (document.readyState === 'complete') {
+      initFloatingCubes();
+    }
   </script>
 
   <% if notice.present? %>
     <p class="py-2 px-3 bg-gray-50 mb-5 text-gray-600 font-medium rounded-lg inline-block transition duration-300 ease-in-out animate-fadeIn" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="mb-12 text-center animate-fadeInUp flex flex-col justify-center items-center py-12">
+  <div class="mb-8 text-center animate-fadeInUp flex flex-col justify-center items-center">
     <h1 class="text-7xl sm:text-8xl font-bold tracking-tight text-gray-900 mb-8">JINNAWAT VILAIRAT</h1>
     <div class="typewriter-container mb-8">
       <p class="text-lg sm:text-xl text-gray-600 typewriter-text" id="typewriter"></p>
@@ -166,7 +201,8 @@
     </style>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      // Function to initialize and run the typewriter animation
+      function initTypewriter() {
         const texts = [
           "Welcome to the Palm's Quest Board!",
           "Here you see, create and manage Palm's quests!",
@@ -175,6 +211,9 @@
 
         let currentTextIndex = 0;
         const typewriterElement = document.getElementById('typewriter');
+
+        // Exit early if the element doesn't exist
+        if (!typewriterElement) return;
 
         function typeText() {
           typewriterElement.textContent = '';
@@ -212,7 +251,18 @@
           typewriterElement.style.animation = 'none';
           setTimeout(typeText, 100);
         });
-      });
+      }
+
+      // Initialize on DOMContentLoaded (for initial page load)
+      document.addEventListener('DOMContentLoaded', initTypewriter);
+
+      // Initialize on turbo:load (for Turbo navigation)
+      document.addEventListener('turbo:load', initTypewriter);
+
+      // In case page is already loaded (common when debugging in console)
+      if (document.readyState === 'complete') {
+        initTypewriter();
+      }
     </script>
 
     <div class="w-full overflow-hidden whitespace-nowrap">
@@ -247,28 +297,50 @@
     </style>
   </div>
 
-  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 pt-16 animate-fadeInUp animate-delay-200">
-    <h1 class="font-medium text-3xl sm:text-4xl text-gray-900">Quests</h1>
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 pt-8 animate-fadeInUp animate-delay-200">
+    <h1 class="font-medium text-3xl sm:text-4xl text-gray-900">Palm's Quests</h1>
     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
       <%= link_to "View Brags", brags_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition duration-300 ease-in-out" %>
       <%= link_to "New Quest", new_quest_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
     </div>
   </div>
 
-  <div id="quests" class="w-full space-y-4 animate-fadeInUp animate-delay-300">
+  <div id="quests" class="w-full animate-fadeInUp animate-delay-300">
     <% if @quests.any? %>
       <% @quests.respond_to?(:order) ? @quests.order(created_at: :desc) : @quests.sort_by(&:created_at).reverse %>
       <% @quests_to_display = @quests.respond_to?(:order) ? @quests.order(:created_at).reverse : @quests %>
       <% @quests_to_display.each_with_index do |quest, index| %>
-          <div id="quest_container_<%= quest.id %>" class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition duration-300 ease-in-out hover:shadow-md animate-fadeInUp" style="animation-delay: <%= 0.3 + (index * 0.1) %>s">
-          <div class="w-full sm:w-3/4">
-            <%= render quest %>
+          <div id="quest_container_<%= quest.id %>" class="flex flex-col sm:flex-row justify-between items-start sm:items-center transition duration-300 ease-in-out animate-fadeInUp" style="animation-delay:<%= 0.3 + (index * 0.1) %>s">
+            <div class="w-full hover:bg-gray-50 transition-colors duration-200 rounded-lg flex justify-between items-center">
+              <div class="w-3/5 flex items-center relative">
+                <!-- Checkbox with its own controller instance -->
+                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10" data-controller="quest">
+                  <input type="checkbox"
+                      <%= "checked" if quest.status? %>
+                      data-action="change->quest#toggle"
+                      data-quest-id="<%= quest.id %>"
+                      class="mx-2 h-5 w-5 text-blue-600 border-gray-300 rounded">
+                </div>
+                <!-- Link for the entire quest area (except checkbox) -->
+                <%= link_to quest, class: "block w-full pl-8 py-3" do %>
+                  <div data-quest-id="<%= quest.id %>" class="w-full sm:w-auto">
+                    <p data-quest-target="name" class="<%= 'line-through' if quest.status? %> truncate"><%= quest.name %></p>
+                    <% if quest.description.present? %>
+                      <div class="text-gray-500 text-sm hidden">
+                        <p class="truncate"><%= quest.description %></p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <%= button_to quest, method: :delete, class: "text-center rounded-full px-5 py-2 bg-red-200 hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full sm:w-auto", data: { turbo_confirm: "Are you sure you want to remove this quest?" } do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span class="ml-1">Remove</span>
+              <% end %>
+            </div>
           </div>
-          <div class="w-full sm:w-1/4 flex flex-col sm:flex-row gap-3 self-end sm:self-auto">
-            <%= link_to "View", quest, class: "text-center rounded-full px-5 py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 font-medium transition duration-300 ease-in-out w-full" %>
-            <%= button_to "Remove", quest, method: :delete, class: "text-center rounded-full px-5 py-2 bg-red-200 hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full", data: { turbo_confirm: "Are you sure you want to remove this quest?" } %>
-          </div>
-        </div>
       <% end %>
     <% else %>
       <div class="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl animate-fadeInUp animate-delay-300">
