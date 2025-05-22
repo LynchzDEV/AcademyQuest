@@ -23,7 +23,7 @@ quests = [
   { name: "CI on Gitlabs", description: "Class about Gitlabs CI with P'Dear", status: true, created_at: Time.parse("2024-03-26") },
   { name: "Jenkins Class", description: "Learning about Jenkins and how to use it with P'J", status: true, created_at: Time.parse("2024-03-27") },
   { name: "Figma Class", description: "Learning about Figma 101 and how to use it", status: true, created_at: Time.parse("2024-03-31") },
-  { name: "BMA Project", description: "Start working BMA Project", status: false, created_at: Time.parse("2024-04-01") },
+  { name: "BMA Project", description: "Start working BMA Project", status: false, created_at: Time.parse("2024-04-01") }
 ]
 
 quests.each do |quest_data|
