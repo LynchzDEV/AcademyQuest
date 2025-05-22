@@ -17,6 +17,23 @@
       to { opacity: 1; }
     }
 
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.4;
+      }
+      90% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     .animate-fadeIn {
       animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
@@ -31,17 +48,201 @@
     .animate-delay-300 { animation-delay: 0.3s; }
     .animate-delay-400 { animation-delay: 0.4s; }
     .animate-delay-500 { animation-delay: 0.5s; }
+
+    .floating-cube {
+      position: fixed;
+      bottom: -50px;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: -1;
+      animation: floatUp 15s linear infinite;
+    }
   </style>
 <% end %>
 
 <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
+  <!-- Floating cubes -->
+  <div id="floating-cubes-container"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('floating-cubes-container');
+      const colors = [
+        'rgba(173, 216, 230, 0.3)', // Light blue
+        'rgba(255, 182, 193, 0.3)', // Light pink
+        'rgba(152, 251, 152, 0.3)', // Light green
+        'rgba(230, 230, 250, 0.3)', // Lavender
+        'rgba(255, 218, 185, 0.3)', // Peach
+        'rgba(176, 224, 230, 0.3)'  // Powder blue
+      ];
+
+      function createCube() {
+        const cube = document.createElement('div');
+        cube.className = 'floating-cube';
+
+        const size = Math.floor(Math.random() * 40) + 15;
+        const left = Math.floor(Math.random() * 100);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const duration = Math.floor(Math.random() * 10) + 10;
+        const delay = Math.random() * 5;
+
+        cube.style.width = `${size}px`;
+        cube.style.height = `${size}px`;
+        cube.style.left = `${left}%`;
+        cube.style.backgroundColor = color;
+        cube.style.animationDuration = `${duration}s`;
+        cube.style.animationDelay = `${delay}s`;
+
+        container.appendChild(cube);
+
+        setTimeout(() => {
+          cube.remove();
+        }, (duration + delay) * 1000);
+      }
+
+      for (let i = 0; i < 12; i++) {
+        createCube();
+      }
+
+      setInterval(createCube, 2000);
+    });
+  </script>
+
   <% if notice.present? %>
     <p class="py-2 px-3 bg-gray-50 mb-5 text-gray-600 font-medium rounded-lg inline-block transition duration-300 ease-in-out animate-fadeIn" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="mb-12 text-center animate-fadeInUp">
-    <h1 class="text-5xl sm:text-6xl font-bold tracking-tight text-gray-900 mb-4">Hello.</h1>
-    <p class="text-2xl sm:text-3xl text-gray-600 max-w-3xl mx-auto leading-relaxed">Welcome to your academy quest page, where your learning adventures begin.</p>
+  <div class="mb-12 text-center animate-fadeInUp flex flex-col justify-center items-center py-16">
+    <h1 class="text-7xl sm:text-8xl font-bold tracking-tight text-gray-900 mb-8">JINNAWAT VILAIRAT</h1>
+    <div class="typewriter-container mb-8">
+      <p class="text-lg sm:text-xl text-gray-600 typewriter-text" id="typewriter"></p>
+    </div>
+
+    <style>
+      .typewriter-container {
+        height: 3rem;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .typewriter-text {
+        overflow: hidden;
+        border-right: 2px solid #666;
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: 0.15em;
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        width: auto;
+        height: 100%;
+      }
+
+      @media (max-width: 640px) {
+        .typewriter-text {
+          font-size: 0.875rem;
+          letter-spacing: 0.1em;
+        }
+      }
+
+      @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+      }
+
+      @keyframes deleting {
+        from { width: 100% }
+        to { width: 0 }
+      }
+
+      @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: #666 }
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const texts = [
+          "Welcome to the Palm's Quest Board!",
+          "Here you see, create and manage Palm's quests!",
+          "Track Palm's progress and achievements."
+        ];
+
+        let currentTextIndex = 0;
+        const typewriterElement = document.getElementById('typewriter');
+
+        function typeText() {
+          typewriterElement.textContent = '';
+
+          const textSpan = document.createElement('span');
+          textSpan.textContent = texts[currentTextIndex];
+          typewriterElement.appendChild(textSpan);
+
+          const textWidth = textSpan.offsetWidth;
+          typewriterElement.style.width = '0';
+
+          const typingAnimation = `typing-${currentTextIndex} 2s steps(40, end) forwards, blink-caret 0.75s step-end infinite`;
+          const deletingAnimation = `deleting-${currentTextIndex} 1.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite`;
+
+          const styleSheet = document.styleSheets[0];
+          styleSheet.insertRule(`@keyframes typing-${currentTextIndex} { from { width: 0 } to { width: ${textWidth}px } }`, styleSheet.cssRules.length);
+          styleSheet.insertRule(`@keyframes deleting-${currentTextIndex} { from { width: ${textWidth}px } to { width: 0 } }`, styleSheet.cssRules.length);
+
+          typewriterElement.style.animation = typingAnimation;
+
+          setTimeout(() => {
+            typewriterElement.style.animation = deletingAnimation;
+
+            setTimeout(() => {
+              currentTextIndex = (currentTextIndex + 1) % texts.length;
+              typeText();
+            }, 1600)
+          }, 3200);
+        }
+
+        typeText();
+
+        window.addEventListener('resize', function() {
+          currentTextIndex = (currentTextIndex - 1 + texts.length) % texts.length;
+          typewriterElement.style.animation = 'none';
+          setTimeout(typeText, 100);
+        });
+      });
+    </script>
+
+    <div class="w-full overflow-hidden whitespace-nowrap">
+      <div class="image-scroll-container">
+        <div class="image-scroll">
+          <% (1..4).each do |i| %>
+            <img src="<%= asset_path("IMG0#{i}.JPG") %>" alt="Image <%= i %>" class="h-auto w-auto mx-2 rounded-lg shadow-lg max-h-96">
+          <% end %>
+          <% (1..4).each do |i| %>
+            <img src="<%= asset_path("IMG0#{i}.JPG") %>" alt="Image <%= i %>" class="h-auto w-auto mx-2 rounded-lg shadow-lg max-h-96">
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .image-scroll-container {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .image-scroll {
+        display: flex;
+        animation: scroll 40s linear infinite;
+      }
+
+      @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-200%); }
+      }
+    </style>
   </div>
 
   <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 pt-16 animate-fadeInUp animate-delay-200">
