@@ -19,7 +19,7 @@ RSpec.describe QuestsController, type: :controller do
     it "assigns all quests as @quests" do
       quest = Quest.create! valid_attributes
       get :index
-      expect(assigns(:quests)).to eq([quest])
+      expect(assigns(:quests)).to eq([ quest ])
     end
   end
 
