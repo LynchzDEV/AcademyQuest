@@ -3,11 +3,7 @@ class QuestsController < ApplicationController
 
   # GET /quests or /quests.json
   def index
-    if Rails.env.test?
-      @quests = Quest.where(name: "Test Quest")
-    else
-      @quests = Quest.all
-    end
+    @quests = Quest.all
   end
 
   # GET /quests/1 or /quests/1.json
