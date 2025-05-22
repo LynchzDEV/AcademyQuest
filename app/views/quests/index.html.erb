@@ -69,19 +69,19 @@
     document.addEventListener('DOMContentLoaded', function() {
       const container = document.getElementById('floating-cubes-container');
       const colors = [
-        'rgba(173, 216, 230, 0.3)', // Light blue
-        'rgba(255, 182, 193, 0.3)', // Light pink
-        'rgba(152, 251, 152, 0.3)', // Light green
-        'rgba(230, 230, 250, 0.3)', // Lavender
-        'rgba(255, 218, 185, 0.3)', // Peach
-        'rgba(176, 224, 230, 0.3)'  // Powder blue
+        'rgba(173, 216, 230, 0.5)', // Light blue
+        'rgba(255, 182, 193, 0.5)', // Light pink
+        'rgba(152, 251, 152, 0.5)', // Light green
+        'rgba(230, 230, 250, 0.5)', // Lavender
+        'rgba(255, 218, 185, 0.5)', // Peach
+        'rgba(176, 224, 230, 0.5)'  // Powder blue
       ];
 
       function createCube() {
         const cube = document.createElement('div');
         cube.className = 'floating-cube';
 
-        const size = Math.floor(Math.random() * 40) + 15;
+        const size = Math.floor(Math.random() * 150) + 30;
         const left = Math.floor(Math.random() * 100);
         const color = colors[Math.floor(Math.random() * colors.length)];
         const duration = Math.floor(Math.random() * 10) + 10;
@@ -90,9 +90,11 @@
         cube.style.width = `${size}px`;
         cube.style.height = `${size}px`;
         cube.style.left = `${left}%`;
+        cube.style.bottom = `-${size}px`;
         cube.style.backgroundColor = color;
         cube.style.animationDuration = `${duration}s`;
         cube.style.animationDelay = `${delay}s`;
+        cube.style.borderRadius = '16px';
 
         container.appendChild(cube);
 
@@ -101,7 +103,7 @@
         }, (duration + delay) * 1000);
       }
 
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 4; i++) {
         createCube();
       }
 
