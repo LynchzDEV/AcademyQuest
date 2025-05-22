@@ -14,7 +14,7 @@ RSpec.describe "Quest Interactions", type: :system do
     visit quests_path
 
     # Verify that completed quests show as completed
-    within("#quest_#{completed_quest.id}") do
+    within("#quest_container_#{completed_quest.id}") do
       expect(page).to have_css(".line-through")
     end
 
