@@ -27,6 +27,34 @@ The test suite uses:
 - FactoryBot for test data generation
 - Capybara for feature and system testing
 
+ ## Continuous Integration
+
+The project uses GitHub Actions for continuous integration with the following jobs:
+
+### Security Scanning
+
+- **Ruby Security Scan**: Uses Brakeman to scan for common Rails security vulnerabilities via static analysis
+- **JavaScript Security Scan**: Audits JavaScript dependencies using Rails Importmap
+
+### Code Quality
+
+- **Linting**: Enforces code style consistency using RuboCop
+
+### Automated Testing
+
+- **Test Suite**: Runs the full test suite including system tests with the following setup:
+  - PostgreSQL database service
+  - Chrome for system tests
+  - Automatic database creation and preparation
+  - Test artifacts collection (screenshots from failed system tests)
+
+The CI pipeline runs on every pull request and push to the main branch, helping maintain code quality and catch issues early.
+
+To view the current CI status:
+1. Go to the GitHub repository
+2. Click on the "Actions" tab
+3. View the latest workflow runs
+
 ## Technology Stack
 
 - Ruby 3.3.0
