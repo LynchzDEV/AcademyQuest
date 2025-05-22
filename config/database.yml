@@ -8,7 +8,7 @@ development:
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
   port: <%= ENV["DB_PORT"] %>
-  database: <%= ENV["DB_NAME"] %>
+  database: <%= ENV["DB_NAME"] %>_development
 
 test:
   <<: *default
@@ -16,7 +16,7 @@ test:
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
   port: <%= ENV["DB_PORT"] %>
-  database: <%= ENV["DB_NAME"] %>
+  database: <%= ENV["DB_NAME"] %>_test
 
 production:
   primary:
