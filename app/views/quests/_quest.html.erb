@@ -6,6 +6,11 @@
            class="mr-2 h-5 w-5 text-blue-600 border-gray-300 rounded">
     <p data-quest-target="name" class="<%= 'line-through' if quest.status? %>"><%= quest.name %></p>
   </div>
+  <% if quest.description.present? %>
+    <div class="pl-7 text-gray-500 text-sm">
+      <p class="truncate"><%= quest.description %></p>
+    </div>
+  <% end %>
   <div>
     <p class="hidden"><%= quest.status.to_s %></p>
   </div>

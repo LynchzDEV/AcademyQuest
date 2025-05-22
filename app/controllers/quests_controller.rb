@@ -65,6 +65,6 @@ class QuestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def quest_params
-      params.require(:quest).permit(:name, :status)
+      params.require(:quest).permit(:name, :status, :description)
     end
 end
