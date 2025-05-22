@@ -1,14 +1,22 @@
-<% content_for :title, "Showing quest" %>
+<% content_for :title, @quest.name %>
 
-<div class="md:w-2/3 w-full">
+<div class="md:w-2/3 w-full mx-auto">
   <% if notice.present? %>
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing quest</h1>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-3xl">Quest Details</h1>
+    <div>
+      <%= link_to "Back", quests_path, class: "rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-50 font-medium" %>
+    </div>
+  </div>
 
-  <%= render @quest %>
+  <div class="flex justify-center">
+    <%= render "quest_detail", quest: @quest %>
+  </div>
 
-  <%= link_to "Back to quests", quests_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this quest", @quest, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  <div class="flex">
+    <%= button_to "Delete Quest", @quest, method: :delete, class: "mt-4 w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure you want to delete this quest?" } %>
+  </div>
 </div>

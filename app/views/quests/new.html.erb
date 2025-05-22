@@ -1,9 +1,11 @@
 <% content_for :title, "New quest" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New quest</h1>
+<div class="max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
+  <h1 class="font-medium text-3xl sm:text-4xl text-gray-900 mb-8">New quest</h1>
 
-  <%= render "form", quest: @quest %>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-6">
+    <%= render "form", quest: @quest %>
+  </div>
 
-  <%= link_to "Back to quests", quests_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to "Back to quests", quests_path, class: "inline-block text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 rounded-full px-5 py-2.5 bg-gray-50 hover:bg-gray-100" %>
 </div>

@@ -1,10 +1,12 @@
-<div id="<%= dom_id quest %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= quest.name %>
+<div id="<%= dom_id quest %>" data-controller="quest" data-quest-id="<%= quest.id %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div class="flex items-center">
+    <input type="checkbox"
+           <%= "checked" if quest.status? %>
+           data-action="change->quest#toggle"
+           class="mr-2 h-5 w-5 text-blue-600 border-gray-300 rounded">
+    <p data-quest-target="name" class="<%= 'line-through' if quest.status? %>"><%= quest.name %></p>
   </div>
   <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= quest.status? ? "Yes" : "No" %>
+    <p class="hidden"><%= quest.status.to_s %></p>
   </div>
 </div>

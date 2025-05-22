@@ -1,31 +1,38 @@
 <% content_for :title, "Quests" %>
 
-<div class="w-full">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-gray-50 mb-5 text-gray-600 font-medium rounded-lg inline-block transition duration-300 ease-in-out" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="flex justify-between items-center p">
-    <h1 class="font-bold text-4xl">Quests</h1>
-    <div class="flex space-x-2">
-      <%= link_to "View Brags", brags_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
-      <%= link_to "New quest", new_quest_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+    <h1 class="font-medium text-3xl sm:text-4xl text-gray-900">Quests</h1>
+    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+      <%= link_to "View Brags", brags_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition duration-300 ease-in-out" %>
+      <%= link_to "New Quest", new_quest_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
     </div>
   </div>
 
-  <div id="quests" class="min-w-full divide-y divide-gray-200 space-y-5">
+  <div id="quests" class="w-full space-y-4">
     <% if @quests.any? %>
-      <% @quests.each do |quest| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render quest %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", quest, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", quest, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+      <% @quests.respond_to?(:order) ? @quests.order(created_at: :desc) : @quests.sort_by(&:created_at).reverse %>
+      <% @quests_to_display = @quests.respond_to?(:order) ? @quests.order(:created_at).reverse : @quests %>
+      <% @quests_to_display.each do |quest| %>
+        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition duration-300 ease-in-out hover:shadow-md">
+          <div class="w-full sm:w-3/4">
+            <%= render quest %>
+          </div>
+          <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-3 self-end sm:self-auto">
+            <%= link_to "View", quest, class: "text-center rounded-full px-5 py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 font-medium transition duration-300 ease-in-out" %>
+            <%= button_to "Remove", quest, method: :delete, class: "text-center rounded-full px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out", data: { turbo_confirm: "Are you sure you want to remove this quest?" } %>
           </div>
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No quests found.</p>
+      <div class="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl">
+        <p class="text-gray-500 text-lg">No quests found.</p>
+        <%= link_to "Create your first quest", new_quest_path, class: "mt-4 rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
+      </div>
     <% end %>
   </div>
 </div>
