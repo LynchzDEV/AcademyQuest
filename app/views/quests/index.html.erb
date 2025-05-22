@@ -1,11 +1,50 @@
 <% content_for :title, "Quests" %>
+<% content_for :head do %>
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .animate-fadeInUp {
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .animate-delay-100 { animation-delay: 0.1s; }
+    .animate-delay-200 { animation-delay: 0.2s; }
+    .animate-delay-300 { animation-delay: 0.3s; }
+    .animate-delay-400 { animation-delay: 0.4s; }
+    .animate-delay-500 { animation-delay: 0.5s; }
+  </style>
+<% end %>
 
 <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-gray-50 mb-5 text-gray-600 font-medium rounded-lg inline-block transition duration-300 ease-in-out" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-gray-50 mb-5 text-gray-600 font-medium rounded-lg inline-block transition duration-300 ease-in-out animate-fadeIn" id="notice"><%= notice %></p>
   <% end %>
 
-  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+  <div class="mb-12 text-center animate-fadeInUp">
+    <h1 class="text-5xl sm:text-6xl font-bold tracking-tight text-gray-900 mb-4">Hello.</h1>
+    <p class="text-2xl sm:text-3xl text-gray-600 max-w-3xl mx-auto leading-relaxed">Welcome to your academy quest page, where your learning adventures begin.</p>
+  </div>
+
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 pt-16 animate-fadeInUp animate-delay-200">
     <h1 class="font-medium text-3xl sm:text-4xl text-gray-900">Quests</h1>
     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
       <%= link_to "View Brags", brags_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition duration-300 ease-in-out" %>
@@ -13,12 +52,12 @@
     </div>
   </div>
 
-  <div id="quests" class="w-full space-y-4">
+  <div id="quests" class="w-full space-y-4 animate-fadeInUp animate-delay-300">
     <% if @quests.any? %>
       <% @quests.respond_to?(:order) ? @quests.order(created_at: :desc) : @quests.sort_by(&:created_at).reverse %>
       <% @quests_to_display = @quests.respond_to?(:order) ? @quests.order(:created_at).reverse : @quests %>
-      <% @quests_to_display.each do |quest| %>
-        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition duration-300 ease-in-out hover:shadow-md">
+      <% @quests_to_display.each_with_index do |quest, index| %>
+        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition duration-300 ease-in-out hover:shadow-md animate-fadeInUp" style="animation-delay: <%= 0.3 + (index * 0.1) %>s">
           <div class="w-full sm:w-3/4">
             <%= render quest %>
           </div>
@@ -29,7 +68,7 @@
         </div>
       <% end %>
     <% else %>
-      <div class="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl">
+      <div class="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl animate-fadeInUp animate-delay-300">
         <p class="text-gray-500 text-lg">No quests found.</p>
         <%= link_to "Create your first quest", new_quest_path, class: "mt-4 rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
       </div>
