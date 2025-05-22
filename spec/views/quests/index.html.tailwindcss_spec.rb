@@ -18,6 +18,6 @@ RSpec.describe "quests/index", type: :view do
     render
     cell_selector = 'div>p'
     assert_select cell_selector, text: Regexp.new("Name".to_s), count: 2
-    assert_select cell_selector, text: Regexp.new(false.to_s), count: 2
+    assert_select "p.line-through", count: 0
   end
 end

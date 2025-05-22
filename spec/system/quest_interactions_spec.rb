@@ -19,7 +19,7 @@ RSpec.describe "Quest Interactions", type: :system do
     end
 
     # Verify that pending quests show as pending
-    within("#quest_#{pending_quest.id}") do
+    within("#quest_container_#{pending_quest.id}") do
       expect(page).not_to have_css(".line-through")
     end
   end
