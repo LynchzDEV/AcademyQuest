@@ -140,7 +140,7 @@
   <div class="mb-8 text-center animate-fadeInUp flex flex-col justify-center items-center">
     <h1 class="text-7xl sm:text-8xl font-bold tracking-tight text-gray-900 mb-8">JINNAWAT VILAIRAT</h1>
     <div class="typewriter-container mb-8">
-      <p class="text-lg sm:text-xl text-gray-600 typewriter-text" id="typewriter"></p>
+      <p class="text-lg sm:text-xl text-gray-600" id="typewriter"></p>
     </div>
 
     <style>
@@ -151,39 +151,33 @@
         display: flex;
         justify-content: center;
       }
-      .typewriter-text {
-        overflow: hidden;
-        border-right: 2px solid #666;
-        white-space: nowrap;
+
+      #typewriter {
+        position: relative;
+        display: inline-block;
         margin: 0 auto;
-        letter-spacing: 0.15em;
-        display: inline-flex;
-        align-items: center;
-        max-width: 100%;
-        width: auto;
         height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      #typewriter::after {
+        content: '|';
+        position: absolute;
+        right: -4px;
+        animation: cursor-blink 1s step-end infinite;
+      }
+
+      @keyframes cursor-blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
       }
 
       @media (max-width: 640px) {
-        .typewriter-text {
+        #typewriter {
           font-size: 0.875rem;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.05em;
         }
-      }
-
-      @keyframes typing {
-        from { width: 0 }
-        to { width: 100% }
-      }
-
-      @keyframes deleting {
-        from { width: 100% }
-        to { width: 0 }
-      }
-
-      @keyframes blink-caret {
-        from, to { border-color: transparent }
-        50% { border-color: #666 }
       }
     </style>
 
@@ -196,54 +190,80 @@
         ];
 
         let currentTextIndex = 0;
-        const typewriterElement = document.getElementById('typewriter');
+        let charIndex = 0;
+        let isTyping = true;
+        let typingInterval;
 
+        const typewriterElement = document.getElementById('typewriter');
         if (!typewriterElement) return;
 
-        function typeText() {
-          typewriterElement.textContent = '';
+        function updateTypewriter() {
+          const currentText = texts[currentTextIndex];
 
-          const textSpan = document.createElement('span');
-          textSpan.textContent = texts[currentTextIndex];
-          typewriterElement.appendChild(textSpan);
+          if (isTyping) {
+            // Typing forward
+            charIndex++;
+            typewriterElement.textContent = currentText.substring(0, charIndex);
 
-          const textWidth = textSpan.offsetWidth;
-          typewriterElement.style.width = '0';
+            if (charIndex >= currentText.length) {
+              // Reached the end of text, pause before deleting
+              isTyping = false;
+              clearInterval(typingInterval);
+              setTimeout(() => {
+                typingInterval = setInterval(updateTypewriter, 50);
+              }, 2000);
+            }
+          } else {
+            // Deleting
+            charIndex--;
+            typewriterElement.textContent = currentText.substring(0, charIndex);
 
-          const typingAnimation = `typing-${currentTextIndex} 2s steps(40, end) forwards, blink-caret 0.75s step-end infinite`;
-          const deletingAnimation = `deleting-${currentTextIndex} 1.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite`;
-
-          const styleSheet = document.styleSheets[0];
-          styleSheet.insertRule(`@keyframes typing-${currentTextIndex} { from { width: 0 } to { width: ${textWidth}px } }`, styleSheet.cssRules.length);
-          styleSheet.insertRule(`@keyframes deleting-${currentTextIndex} { from { width: ${textWidth}px } to { width: 0 } }`, styleSheet.cssRules.length);
-
-          typewriterElement.style.animation = typingAnimation;
-
-          setTimeout(() => {
-            typewriterElement.style.animation = deletingAnimation;
-
-            setTimeout(() => {
+            if (charIndex <= 0) {
+              // Finished deleting, move to next text
+              isTyping = true;
               currentTextIndex = (currentTextIndex + 1) % texts.length;
-              typeText();
-            }, 1600)
-          }, 3200);
+              clearInterval(typingInterval);
+              setTimeout(() => {
+                typingInterval = setInterval(updateTypewriter, 80);
+              }, 500);
+            }
+          }
         }
 
-        typeText();
+        // Clear any existing intervals to prevent duplicates
+        if (window.typewriterInterval) {
+          clearInterval(window.typewriterInterval);
+        }
 
-        window.addEventListener('resize', function() {
-          currentTextIndex = (currentTextIndex - 1 + texts.length) % texts.length;
-          typewriterElement.style.animation = 'none';
-          setTimeout(typeText, 100);
-        });
+        // Start the typewriter effect
+        typewriterElement.textContent = '';
+        typingInterval = setInterval(updateTypewriter, 80);
+        window.typewriterInterval = typingInterval;
+
+        // Cleanup function
+        return function cleanup() {
+          clearInterval(typingInterval);
+          window.typewriterInterval = null;
+        };
+      }
+
+      // Clean up on page navigation
+      function cleanupTypewriter() {
+        if (window.typewriterInterval) {
+          clearInterval(window.typewriterInterval);
+          window.typewriterInterval = null;
+        }
       }
 
       document.addEventListener('DOMContentLoaded', initTypewriter);
       document.addEventListener('turbo:load', initTypewriter);
+      document.addEventListener('turbo:before-visit', cleanupTypewriter);
+
       if (document.readyState === 'complete') {
         initTypewriter();
       }
     </script>
+
 
     <div class="w-full overflow-hidden whitespace-nowrap">
       <div class="image-scroll-container">
