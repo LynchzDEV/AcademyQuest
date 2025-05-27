@@ -66,14 +66,10 @@
   <!-- Floating cubes -->
   <div id="floating-cubes-container"></div>
   <script>
-    // Function to initialize and run the floating cubes animation
     function initFloatingCubes() {
       const container = document.getElementById('floating-cubes-container');
 
-      // Exit early if the container doesn't exist
       if (!container) return;
-
-      // Clear any existing cubes
       container.innerHTML = '';
 
       const colors = [
@@ -117,13 +113,10 @@
         createCube();
       }
 
-      // Store the interval ID so we can clear it if needed
       window.cubeInterval = setInterval(createCube, 2000);
-
       return window.cubeInterval;
     }
 
-    // Clear existing intervals on page navigation to prevent memory leaks
     function clearCubeInterval() {
       if (window.cubeInterval) {
         clearInterval(window.cubeInterval);
@@ -131,16 +124,10 @@
       }
     }
 
-    // Initialize on DOMContentLoaded (for initial page load)
     document.addEventListener('DOMContentLoaded', initFloatingCubes);
-
-    // Initialize on turbo:load (for Turbo navigation)
     document.addEventListener('turbo:load', initFloatingCubes);
-
-    // Clear interval when navigating away
     document.addEventListener('turbo:before-visit', clearCubeInterval);
 
-    // In case page is already loaded
     if (document.readyState === 'complete') {
       initFloatingCubes();
     }
@@ -201,7 +188,6 @@
     </style>
 
     <script>
-      // Function to initialize and run the typewriter animation
       function initTypewriter() {
         const texts = [
           "Welcome to the Palm's Quest Board!",
@@ -212,7 +198,6 @@
         let currentTextIndex = 0;
         const typewriterElement = document.getElementById('typewriter');
 
-        // Exit early if the element doesn't exist
         if (!typewriterElement) return;
 
         function typeText() {
@@ -253,13 +238,8 @@
         });
       }
 
-      // Initialize on DOMContentLoaded (for initial page load)
       document.addEventListener('DOMContentLoaded', initTypewriter);
-
-      // Initialize on turbo:load (for Turbo navigation)
       document.addEventListener('turbo:load', initTypewriter);
-
-      // In case page is already loaded (common when debugging in console)
       if (document.readyState === 'complete') {
         initTypewriter();
       }
