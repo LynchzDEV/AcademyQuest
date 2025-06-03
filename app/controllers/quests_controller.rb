@@ -6,6 +6,10 @@ class QuestsController < ApplicationController
     @quests = Quest.all
   end
 
+  def fun
+    @quests = Quest.all
+  end
+
   # GET /quests/1 or /quests/1.json
   def show
   end

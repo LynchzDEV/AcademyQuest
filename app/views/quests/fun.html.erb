@@ -1,0 +1,599 @@
+<% content_for :title, "Quests" %>
+<% content_for :head do %>
+  <style>
+    /* Animated gradient background */
+    body {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Particle effects */
+    @keyframes sparkle {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+      }
+    }
+
+    .sparkle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: sparkle 3s ease-in-out infinite;
+    }
+
+    /* Enhanced animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(-100px);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(0);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .animate-fadeInUp {
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .animate-bounceIn {
+      animation: bounceIn 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    }
+
+    .animate-delay-100 { animation-delay: 0.1s; }
+    .animate-delay-200 { animation-delay: 0.2s; }
+    .animate-delay-300 { animation-delay: 0.3s; }
+    .animate-delay-400 { animation-delay: 0.4s; }
+    .animate-delay-500 { animation-delay: 0.5s; }
+
+    /* Enhanced floating elements */
+    .floating-cube {
+      position: fixed;
+      bottom: -50px;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: -1;
+      animation: floatUp 20s linear infinite;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Enhanced GitHub icon */
+    @keyframes githubFloat {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      25% {
+        transform: translateY(-12px) rotate(5deg) scale(1.1);
+      }
+      50% {
+        transform: translateY(-6px) rotate(0deg) scale(1.05);
+      }
+      75% {
+        transform: translateY(-18px) rotate(-5deg) scale(1.1);
+      }
+    }
+
+    @keyframes githubPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(107, 114, 128, 0.7);
+      }
+      50% {
+        box-shadow: 0 0 0 20px rgba(107, 114, 128, 0);
+      }
+    }
+
+    @keyframes githubGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(107, 114, 128, 0.5));
+      }
+      50% {
+        filter: drop-shadow(0 0 25px rgba(107, 114, 128, 0.8));
+      }
+    }
+
+    .github-icon {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 100;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      animation: githubFloat 6s ease-in-out infinite,
+                 githubPulse 4s ease-in-out infinite,
+                 githubGlow 3s ease-in-out infinite;
+      border-radius: 50%;
+      padding: 12px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.4));
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .github-icon:hover {
+      transform: scale(1.4) rotate(360deg);
+      animation-play-state: paused;
+      box-shadow: 0 20px 40px rgba(107, 114, 128, 0.4);
+    }
+
+    .github-icon svg {
+      transition: all 0.5s ease;
+    }
+
+    .github-icon:hover svg {
+      transform: rotate(-360deg);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    }
+
+    /* Glass morphism effects */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced quest items */
+    .quest-item {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      margin-bottom: 15px;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .quest-item:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced text effects */
+    .hero-title {
+      background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 5s ease infinite;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Loading spinner for typewriter */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+<% end %>
+
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans relative">
+  <!-- Sparkle particles -->
+  <div id="sparkles-container"></div>
+  <script>
+    function initSparkles() {
+      const container = document.getElementById('sparkles-container');
+      if (!container) return;
+
+      function createSparkle() {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 3 + 's';
+        container.appendChild(sparkle);
+
+        setTimeout(() => {
+          if (sparkle.parentNode) sparkle.remove();
+        }, 3000);
+      }
+
+      setInterval(createSparkle, 200);
+    }
+
+    document.addEventListener('DOMContentLoaded', initSparkles);
+    document.addEventListener('turbo:load', initSparkles);
+  </script>
+
+  <!-- Enhanced GitHub icon -->
+  <a href="https://github.com/LynchzDEV/AcademyQuest" target="_blank" class="github-icon" title="View source code on GitHub">
+    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="currentColor" class="text-white">
+      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+    </svg>
+  </a>
+
+  <!-- Enhanced floating cubes -->
+  <div id="floating-cubes-container"></div>
+  <script>
+    function initFloatingCubes() {
+      const container = document.getElementById('floating-cubes-container');
+
+      if (!container) return;
+      container.innerHTML = '';
+
+      const colors = [
+        'linear-gradient(45deg, #ff6b6b, #ee5a24)',
+        'linear-gradient(45deg, #4834d4, #686de0)',
+        'linear-gradient(45deg, #00d2d3, #54a0ff)',
+        'linear-gradient(45deg, #5f27cd, #00d2d3)',
+        'linear-gradient(45deg, #ff9ff3, #f368e0)',
+        'linear-gradient(45deg, #feca57, #ff9ff3)'
+      ];
+
+      function createCube() {
+        const cube = document.createElement('div');
+        cube.className = 'floating-cube';
+
+        const size = Math.floor(Math.random() * 120) + 40;
+        const left = Math.floor(Math.random() * 100);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const duration = Math.floor(Math.random() * 15) + 15;
+        const delay = Math.random() * 5;
+
+        cube.style.width = `${size}px`;
+        cube.style.height = `${size}px`;
+        cube.style.left = `${left}%`;
+        cube.style.bottom = `-${size}px`;
+        cube.style.background = color;
+        cube.style.animationDuration = `${duration}s`;
+        cube.style.animationDelay = `${delay}s`;
+        cube.style.borderRadius = '20px';
+        cube.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2)';
+
+        container.appendChild(cube);
+
+        setTimeout(() => {
+          if (cube.parentNode === container) {
+            cube.remove();
+          }
+        }, (duration + delay) * 1000);
+      }
+
+      for (let i = 0; i < 6; i++) {
+        createCube();
+      }
+
+      window.cubeInterval = setInterval(createCube, 1500);
+      return window.cubeInterval;
+    }
+
+    function clearCubeInterval() {
+      if (window.cubeInterval) {
+        clearInterval(window.cubeInterval);
+        window.cubeInterval = null;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initFloatingCubes);
+    document.addEventListener('turbo:load', initFloatingCubes);
+    document.addEventListener('turbo:before-visit', clearCubeInterval);
+
+    if (document.readyState === 'complete') {
+      initFloatingCubes();
+    }
+  </script>
+
+  <% if notice.present? %>
+    <div class="glass-card py-4 px-6 mb-8 text-white font-medium inline-block transition duration-500 ease-in-out animate-bounceIn" id="notice">
+      <div class="flex items-center">
+        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <%= notice %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mb-12 text-center animate-bounceIn flex flex-col justify-center items-center">
+    <h1 class="hero-title text-8xl sm:text-9xl font-black tracking-tight mb-12">JINNAWAT VILAIRAT</h1>
+    <div class="typewriter-container mb-12">
+      <p class="text-xl sm:text-2xl text-white font-semibold" id="typewriter"></p>
+    </div>
+
+    <style>
+      .typewriter-container {
+        height: 4rem;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 50px;
+        padding: 1rem 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      #typewriter {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+
+      #typewriter::after {
+        content: '|';
+        position: absolute;
+        right: -8px;
+        animation: cursor-blink 1s step-end infinite;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      @keyframes cursor-blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
+      @media (max-width: 640px) {
+        #typewriter {
+          font-size: 1rem;
+          letter-spacing: 0.05em;
+        }
+      }
+    </style>
+
+    <script>
+      function initTypewriter() {
+        const texts = [
+          "✨ Welcome to the Palm's Magical Quest Board! ✨",
+          "🎯 Create, manage and conquer your epic quests! 🎯",
+          "🏆 Track your legendary progress and achievements! 🏆",
+          "🚀 Level up your productivity game! 🚀"
+        ];
+
+        let currentTextIndex = 0;
+        let charIndex = 0;
+        let isTyping = true;
+        let typingInterval;
+
+        const typewriterElement = document.getElementById('typewriter');
+        if (!typewriterElement) return;
+
+        function updateTypewriter() {
+          const currentText = texts[currentTextIndex];
+
+          if (isTyping) {
+            charIndex++;
+            typewriterElement.textContent = currentText.substring(0, charIndex);
+
+            if (charIndex >= currentText.length) {
+              isTyping = false;
+              clearInterval(typingInterval);
+              setTimeout(() => {
+                typingInterval = setInterval(updateTypewriter, 30);
+              }, 3000);
+            }
+          } else {
+            charIndex--;
+            typewriterElement.textContent = currentText.substring(0, charIndex);
+
+            if (charIndex <= 0) {
+              isTyping = true;
+              currentTextIndex = (currentTextIndex + 1) % texts.length;
+              clearInterval(typingInterval);
+              setTimeout(() => {
+                typingInterval = setInterval(updateTypewriter, 60);
+              }, 500);
+            }
+          }
+        }
+
+        if (window.typewriterInterval) {
+          clearInterval(window.typewriterInterval);
+        }
+
+        typewriterElement.textContent = '';
+        typingInterval = setInterval(updateTypewriter, 60);
+        window.typewriterInterval = typingInterval;
+
+        return function cleanup() {
+          clearInterval(typingInterval);
+          window.typewriterInterval = null;
+        };
+      }
+
+      function cleanupTypewriter() {
+        if (window.typewriterInterval) {
+          clearInterval(window.typewriterInterval);
+          window.typewriterInterval = null;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', initTypewriter);
+      document.addEventListener('turbo:load', initTypewriter);
+      document.addEventListener('turbo:before-visit', cleanupTypewriter);
+
+      if (document.readyState === 'complete') {
+        initTypewriter();
+      }
+    </script>
+
+    <div class="w-full overflow-hidden whitespace-nowrap glass-card p-4 mb-8">
+      <div class="image-scroll-container">
+        <div class="image-scroll">
+          <% (1..4).each do |i| %>
+            <img src="<%= asset_path("IMG0#{i}.JPG") %>" alt="Image <%= i %>" class="h-auto w-auto mx-4 rounded-2xl shadow-2xl max-h-80 border-4 border-white/20">
+          <% end %>
+          <% (1..4).each do |i| %>
+            <img src="<%= asset_path("IMG0#{i}.JPG") %>" alt="Image <%= i %>" class="h-auto w-auto mx-4 rounded-2xl shadow-2xl max-h-80 border-4 border-white/20">
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .image-scroll-container {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .image-scroll {
+        display: flex;
+        animation: scroll 50s linear infinite;
+      }
+
+      .image-scroll img {
+        transition: transform 0.3s ease;
+      }
+
+      .image-scroll img:hover {
+        transform: scale(1.1);
+      }
+
+      @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-200%); }
+      }
+    </style>
+  </div>
+
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-6 pt-8 animate-fadeInUp animate-delay-200">
+    <h1 class="font-black text-4xl sm:text-5xl text-white hero-title">🎮 Palm's Epic Quests 🎮</h1>
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
+      <%= link_to "🏆 View Brags", brags_path, class: "glass-button w-full sm:w-auto text-center rounded-full px-8 py-4 text-white font-bold transition duration-300 ease-in-out text-lg" %>
+      <%= link_to "⭐ New Quest", new_quest_path, class: "glass-button w-full sm:w-auto text-center rounded-full px-8 py-4 text-white font-bold transition duration-300 ease-in-out text-lg bg-gradient-to-r from-purple-500 to-pink-500" %>
+    </div>
+  </div>
+
+  <div id="quests" class="w-full animate-fadeInUp animate-delay-300">
+    <% if @quests.any? %>
+      <% @quests.respond_to?(:order) ? @quests.order(created_at: :desc) : @quests.sort_by(&:created_at).reverse %>
+      <% @quests_to_display = @quests.respond_to?(:order) ? @quests.order(:created_at).reverse : @quests %>
+      <% @quests_to_display.each_with_index do |quest, index| %>
+          <div id="quest_container_<%= quest.id %>" class="quest-item p-6 animate-fadeInUp" style="animation-delay:<%= 0.4 + (index * 0.1) %>s">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center flex-1">
+                <div class="mr-4" data-controller="quest">
+                  <input type="checkbox"
+                      <%= "checked" if quest.status? %>
+                      data-action="change->quest#toggle"
+                      data-quest-id="<%= quest.id %>"
+                      class="h-6 w-6 text-green-500 border-2 border-white/30 rounded-lg bg-white/10 focus:ring-2 focus:ring-white/50">
+                </div>
+                <%= link_to quest, class: "flex-1 group" do %>
+                  <div data-quest-id="<%= quest.id %>" class="flex flex-col">
+                    <p data-quest-target="name" class="<%= 'line-through opacity-60' if quest.status? %> text-white font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">
+                      <%= quest.status? ? "✅" : "🎯" %> <%= quest.name %>
+                    </p>
+                    <% if quest.description.present? %>
+                      <div class="text-white/70 text-sm mt-2">
+                        <p class="truncate">💭 <%= quest.description %></p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <%= button_to quest, method: :delete, class: "glass-button rounded-full px-6 py-3 text-white font-medium transition duration-300 ease-in-out ml-4 hover:bg-red-500/30", data: { turbo_confirm: "Are you sure you want to remove this epic quest?" } do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span class="ml-2">🗑️ Remove</span>
+              <% end %>
+            </div>
+          </div>
+      <% end %>
+    <% else %>
+      <div class="glass-card flex flex-col items-center justify-center py-20 animate-bounceIn animate-delay-300">
+        <div class="text-6xl mb-6">🌟</div>
+        <p class="text-white text-2xl font-bold mb-4">No quests found!</p>
+        <p class="text-white/80 text-lg mb-8">Your adventure awaits - create your first epic quest!</p>
+        <%= link_to "🚀 Create Your First Quest", new_quest_path, class: "glass-button rounded-full px-10 py-4 text-white font-bold transition duration-300 ease-in-out text-xl bg-gradient-to-r from-blue-500 to-purple-600" %>
+      </div>
+    <% end %>
+  </div>
+</div>
