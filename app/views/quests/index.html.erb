@@ -332,7 +332,7 @@
       <% @quests_to_display.each_with_index do |quest, index| %>
           <div id="quest_container_<%= quest.id %>" class="flex flex-col sm:flex-row justify-between items-start sm:items-center transition duration-300 ease-in-out animate-fadeInUp" style="animation-delay:<%= 0.3 + (index * 0.1) %>s">
             <div class="w-full hover:bg-gray-50 transition-colors duration-200 rounded-lg flex justify-between items-center">
-              <div class="w-3/5 flex items-center relative">
+              <div class="w-4/5 flex items-center relative">
                 <!-- Checkbox with its own controller instance -->
                 <div class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10" data-controller="quest">
                   <input type="checkbox"
@@ -353,11 +353,11 @@
                   </div>
                 <% end %>
               </div>
-              <%= button_to quest, method: :delete, class: "text-center rounded-full px-5 py-2 bg-red-200 hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full sm:w-auto", data: { turbo_confirm: "Are you sure you want to remove this quest?" } do %>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <%= button_to quest, method: :delete, class: "text-center rounded-full px-5 py-2 sm:bg-red-200 sm:hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full sm:w-auto", data: { turbo_confirm: "Are you sure you want to remove this quest?" } do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-red-500 sm:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
-                <span class="ml-1">Remove</span>
+                <span class="ml-1 hidden sm:inline">Remove</span>
               <% end %>
             </div>
           </div>
