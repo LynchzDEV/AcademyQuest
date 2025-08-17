@@ -1,14 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Academy Quest" %></title>
+    <!-- Basic Meta Tags -->
+    <meta charset="utf-8">
+    <title><%= content_for(:title) || "AcademyQuest - Personal Quest & Task Management by Jinnawat Vilairat" %></title>
+    <meta name="description" content="<%= content_for(:description) || "AcademyQuest is a modern quest tracking application by Jinnawat Vilairat (Palm). Create, manage, and track your personal quests and goals with an intuitive interface designed for productivity and achievement." %>">
+    <meta name="keywords" content="quest tracking, task management, productivity, goal achievement, personal development, Jinnawat Vilairat, Palm, project management, todo list, progress tracking">
+    <meta name="author" content="Jinnawat Vilairat">
+    <meta name="copyright" content="© <%= Date.current.year %> Jinnawat Vilairat">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= request.original_url %>">
+    
+    <!-- Viewport and Mobile -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AcademyQuest">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= request.original_url %>">
+    <meta property="og:title" content="<%= content_for(:og_title) || content_for(:title) || "AcademyQuest - Personal Quest & Task Management" %>">
+    <meta property="og:description" content="<%= content_for(:og_description) || content_for(:description) || "Modern quest tracking application by Jinnawat Vilairat. Create, manage, and track your personal quests and goals with an intuitive productivity-focused interface." %>">
+    <meta property="og:image" content="<%= asset_url('og-image.png') rescue "#{request.base_url}/icon.png" %>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="AcademyQuest - Quest & Task Management Application">
+    <meta property="og:site_name" content="AcademyQuest">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<%= request.original_url %>">
+    <meta name="twitter:title" content="<%= content_for(:twitter_title) || content_for(:og_title) || content_for(:title) || "AcademyQuest - Personal Quest & Task Management" %>">
+    <meta name="twitter:description" content="<%= content_for(:twitter_description) || content_for(:og_description) || content_for(:description) || "Modern quest tracking application by Jinnawat Vilairat. Create, manage, and track your personal quests and goals." %>">
+    <meta name="twitter:image" content="<%= asset_url('twitter-image.png') rescue "#{request.base_url}/icon.png" %>">
+    <meta name="twitter:image:alt" content="AcademyQuest - Quest & Task Management Application">
+    <meta name="twitter:creator" content="@JinnawatV">
+    <meta name="twitter:site" content="@AcademyQuest">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="application-name" content="AcademyQuest">
+    <meta name="msapplication-tooltip" content="Quest & Task Management Application">
+    <meta name="rating" content="general">
+    <meta name="distribution" content="global">
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "<%= request.base_url %>/#webapp",
+          "name": "AcademyQuest",
+          "alternateName": "Academy Quest",
+          "description": "A modern quest tracking application for personal productivity and goal achievement. Create, manage, and track your quests with an intuitive interface.",
+          "url": "<%= request.base_url %>",
+          "applicationCategory": "ProductivityApplication",
+          "operatingSystem": "Web Browser",
+          "permissions": "browser",
+          "author": {
+            "@type": "Person",
+            "@id": "<%= request.base_url %>/#person"
+          },
+          "creator": {
+            "@type": "Person",
+            "@id": "<%= request.base_url %>/#person"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "softwareVersion": "1.0",
+          "datePublished": "<%= Date.current.iso8601 %>",
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "Person",
+          "@id": "<%= request.base_url %>/#person",
+          "name": "Jinnawat Vilairat",
+          "alternateName": "Palm",
+          "description": "Developer and creator of AcademyQuest, a modern quest tracking application for personal productivity and goal achievement.",
+          "jobTitle": "Software Developer",
+          "knowsAbout": ["Web Development", "Software Engineering", "Productivity Applications", "Task Management", "React", "Ruby on Rails"],
+          "sameAs": [
+            "https://github.com/LynchzDEV"
+          ]
+        }<% if controller_name == 'quests' && action_name == 'index' %>,
+        {
+          "@type": "BreadcrumbList",
+          "@id": "<%= request.original_url %>#breadcrumbs",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "<%= request.base_url %>"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Quest Board",
+              "item": "<%= request.original_url %>"
+            }
+          ]
+        }<% end %>
+      ]
+    }
+    </script>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>

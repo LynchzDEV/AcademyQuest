@@ -30,7 +30,7 @@ class QuestsController < ApplicationController
     respond_to do |format|
       if @quest.save
         format.html { redirect_to @quest, notice: "Quest was successfully created." }
-        format.json { render :show, status: :created, location: @quest }
+        format.json { render json: { id: @quest.id, name: @quest.name, description: @quest.description, status: @quest.status }, status: :created }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @quest.errors, status: :unprocessable_entity }

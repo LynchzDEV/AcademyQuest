@@ -1,51 +1,103 @@
-# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+# .dockerignore for AcademyQuest Rails application
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file
 
-# Ignore git directory.
+# Git and version control
 /.git/
 /.gitignore
+/.gitattributes
 
-# Ignore bundler config.
-/.bundle
-
-# Ignore all environment files.
+# Environment and secrets
 /.env*
-
-# Ignore all default key files.
 /config/master.key
 /config/credentials/*.key
+/config/credentials.yml.enc
 
-# Ignore all logfiles and tempfiles.
+# Bundler and Ruby
+/.bundle
+/vendor/cache
+/.rvm
+/.rbenv
+/.ruby-version
+
+# Rails logs and temp files
 /log/*
-/tmp/*
 !/log/.keep
+/tmp/*
 !/tmp/.keep
-
-# Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/.keep
+/tmp/cache/*
+!/tmp/cache/.keep
 
-# Ignore storage (uploaded files in development and any SQLite databases).
+# Rails storage and uploads
 /storage/*
 !/storage/.keep
 /tmp/storage/*
 !/tmp/storage/.keep
 
-# Ignore assets.
+# Database files
+*.sqlite3
+*.sqlite3-*
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+# Assets and node modules
 /node_modules/
 /app/assets/builds/*
 !/app/assets/builds/.keep
 /public/assets
+/public/packs
+/public/packs-test
 
-# Ignore CI service files.
+# Test coverage and reports
+/coverage/
+/.nyc_output
+/.simplecov*
+
+# CI/CD and deployment
 /.github
-
-# Ignore Kamal files.
+/.gitlab-ci.yml
+/.circleci
+/.travis.yml
 /config/deploy*.yml
 /.kamal
 
-# Ignore development files
+# Development tools
 /.devcontainer
+/.vscode
+/.idea
+*.swp
+*.swo
+*~
 
-# Ignore Docker-related files
+# Documentation
+/README.md
+/CHANGELOG.md
+/LICENSE*
+/docs/
+
+# Docker files
 /.dockerignore
 /Dockerfile*
+/docker-compose*.yml
+
+# Testing
+/spec/tmp/
+/spec/reports/
+/test/tmp/
+/test/coverage/
+/cucumber.yml
+/features/
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Security scans and tools
+/.brakeman
+/.rubocop*

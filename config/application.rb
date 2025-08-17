@@ -23,5 +23,11 @@ module AcademyQuest
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Track application boot time for health monitoring
+    config.boot_time = Time.current
+    
+    # Application version for health endpoint
+    config.version = ENV['APP_VERSION'] || 'latest'
   end
 end

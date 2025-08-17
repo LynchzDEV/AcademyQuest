@@ -52,6 +52,15 @@ RSpec.describe "/quests", type: :request do
         post quests_url, params: { quest: valid_attributes }
         expect(response).to redirect_to(quest_url(Quest.last))
       end
+
+      it "returns JSON data when format is JSON" do
+        post quests_url, params: { quest: valid_attributes }, as: :json
+        expect(response).to have_http_status(:created)
+        json_response = JSON.parse(response.body)
+        expect(json_response["name"]).to eq("Request Test Quest")
+        expect(json_response["status"]).to eq(false)
+        expect(json_response["id"]).to be_present
+      end
     end
 
     context "with invalid parameters" do
