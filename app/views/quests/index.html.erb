@@ -122,46 +122,10 @@
     .github-icon:hover svg {
       transform: rotate(-10deg);
     }
-
-    /* Modal styles */
-    .modal-backdrop {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    /* Ensure modal is above all other content */
-    .modal-container {
-      z-index: 9999;
-    }
-
-    /* Prevent body scroll when modal is open */
-    body.modal-open {
-      overflow: hidden;
-    }
-
-    /* Modal animation improvements */
-    @keyframes modalFadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95) translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    .modal-content {
-      animation: modalFadeIn 0.2s ease-out;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(255, 255, 255, 0.95);
-    }
   </style>
 <% end %>
 
-<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans" data-controller="quest-modal" data-quest-modal-create-url-value="<%= quests_path %>">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
   <!-- GitHub icon -->
   <a href="https://github.com/LynchzDEV/AcademyQuest" target="_blank" class="github-icon" title="View source code on GitHub">
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 hover:text-gray-600">
@@ -407,11 +371,11 @@
     <h1 class="font-medium text-3xl sm:text-4xl text-gray-900">Palm's Quests</h1>
     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
       <%= link_to "View Brags", brags_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium transition duration-300 ease-in-out" %>
-      <button data-action="click->quest-modal#openModal" class="w-full sm:w-auto text-center rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out">New Quest</button>
+      <%= link_to "New Quest", new_quest_path, class: "w-full sm:w-auto text-center rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
     </div>
   </div>
 
-  <div id="quests" class="w-full animate-fadeInUp animate-delay-300" data-quest-modal-target="questsList">
+  <div id="quests" class="w-full animate-fadeInUp animate-delay-300">
     <% if @quests.any? %>
       <% @quests.respond_to?(:order) ? @quests.order(created_at: :desc) : @quests.sort_by(&:created_at).reverse %>
       <% @quests_to_display = @quests.respond_to?(:order) ? @quests.order(:created_at).reverse : @quests %>
@@ -439,69 +403,20 @@
                   </div>
                 <% end %>
               </div>
-              <form action="<%= quest_path(quest) %>" method="post" data-turbo="false" data-controller="quest-delete" data-quest-delete-quest-id-value="<%= quest.id %>" data-action="submit->quest-delete#delete" class="contents">
-                <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-                <%= hidden_field_tag :_method, 'delete' %>
-                <button type="submit" data-action="click->quest-delete#handleButtonClick" class="text-center rounded-full px-5 py-2 sm:bg-red-200 sm:hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full sm:w-auto">
+              <%= button_to quest, method: :delete, class: "text-center rounded-full px-5 py-2 sm:bg-red-200 sm:hover:bg-gray-200 text-gray-700 font-medium transition duration-300 ease-in-out w-full sm:w-auto", data: { turbo_confirm: "Are you sure you want to remove this quest?" } do %>
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-red-500 sm:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  <span class="ml-1 hidden sm:inline">Remove</span>
-                </button>
-              </form>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span class="ml-1 hidden sm:inline">Remove</span>
+              <% end %>
             </div>
           </div>
       <% end %>
     <% else %>
       <div class="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl animate-fadeInUp animate-delay-300">
         <p class="text-gray-500 text-lg">No quests found.</p>
-        <button data-action="click->quest-modal#openModal" class="mt-4 rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out">Create your first quest</button>
+        <%= link_to "Create your first quest", new_quest_path, class: "mt-4 rounded-full px-5 py-2 bg-black hover:bg-gray-800 text-white font-medium transition duration-300 ease-in-out" %>
       </div>
     <% end %>
-  </div>
-
-  <!-- Modal for creating new quest -->
-  <div data-quest-modal-target="modal" data-action="click->quest-modal#clickOutside" class="hidden fixed inset-0 modal-backdrop modal-container flex items-center justify-center p-4">
-    <div class="rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto modal-content">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">Create New Quest</h2>
-          <button data-action="click->quest-modal#closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        
-        <!-- Error container -->
-        <div data-quest-modal-target="errorContainer" class="hidden mb-4"></div>
-        
-        <!-- Form -->
-        <form data-quest-modal-target="form" data-action="submit->quest-modal#submitForm" class="contents max-w-md mx-auto">
-          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-          
-          <div class="my-6">
-            <label for="quest_name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-            <input type="text" name="quest[name]" id="quest_name" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-gray-400 transition-colors duration-200 focus:ring-0" required>
-          </div>
-
-          <div class="my-6">
-            <label for="quest_description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea name="quest[description]" id="quest_description" rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-gray-400 transition-colors duration-200 focus:ring-0"></textarea>
-          </div>
-
-          <input type="hidden" name="quest[status]" value="false">
-
-          <div class="mt-8 flex gap-3">
-            <button type="button" data-action="click->quest-modal#closeModal" class="flex-1 rounded-full px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors duration-200">
-              Cancel
-            </button>
-            <button type="submit" class="flex-1 rounded-full px-6 py-3 bg-black hover:bg-gray-800 text-white text-sm font-medium transition-colors duration-200">
-              Create Quest
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   </div>
 </div>
